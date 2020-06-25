@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="ja" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>IanniXを用いた3次元図形譜と聴覚障がい者のための音の可視化</title>
+<style type="text/css">
+
+.newStyle1 {
+	background-color: #000000;
+	color: #FFFFFF;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+<script type="text/javascript">
+        $(document).ready(function(){
+            $('.slider').bxSlider({
+                auto: true,
+                pause: 2500,
+                slideHeight: 384,
+                slideWidth: 683
+                
+            });
+        });
+</script>
+</head>
+<body>
+<div class="auto-style1">
+<span style="font-family:'ＭＳ 明朝'">
+ <font size="+4">
+<p align="center">
+<b>
+IanniXを用いた3次元図形譜と聴覚障がい者のための音の可視化
+</b>
+</font>
+<br>
+<br>
+<font size="+3">
+東洋大学総合情報学部総合情報学科メディア文化コース4年　内田亘俊
+</font>
+</p>
+<br>
+<br>
+<br>
+</span>
+</div>
+ <font size="+2">
+<p align="left">
+<b>Iannixを用いた3次元図形譜</b>
+</font>
+<br>
+<br>
+<br>
+<img alt="" height="384" src="Caption001.jpg" width="683" />
+<br>
+<br>
+<br>
+<font size="+1">
+<b>作成方法等解説</b>
+</font>
+<font size="+0">
+<br>
+<br>
+<br>
+　音楽を表現するには一般的に楽譜を用いるが、20世紀中期頃になってからアメリカの作曲家、モートン・フェルドマンによって図形により音楽を表現する「図形譜」が発案されたとされる。
+<br>
+20世紀の作曲家の場合、図形譜で表現するのに2次元図形を使用していたが、最近になって3次元図形も活用されるようになった。
+<br>
+そこで、図形譜作曲ソフトウェア「Iannix」による2次元視点から3次元視点への切り替え、midiとIannixの連携を受けて、微分音での演奏シミュレーションを説明したいと思う。
+<br>
+最初に下の画像がIannixを起動した時のスタート画面である。
+<br>
+<p align="left"><img alt="" height="384" src="Iannix001.jpg" width="683" /></p>
+<br>
+起動した時は、このように何も図形が表示されていなく、xy軸だけ表示されている画面になっている。
+<br>
+次に、軸上に図形を描く。
+<br>
+今回は下の画面右の「RESAMPLE」ボタンの下の関数図形のサンプルより「2D rosette or 3D sphere?」を選択する。
+<br>
+すると、下の画像のように軸上に2次元の花形の図形が追加され、画面右に関数やパラメータの編集画面が表示される。
+<br>
+<br>
+<img alt="" height="384" src="Iannix002.jpg" width="683" />
+<br>
+<br>
+今度は上の画像のように表示されている2次元図形を3次元図形に変換する。
+<br>
+xy座標画面にカーソルを置き、Windowsの場合はAltキーを押しながら、macの場合はoptionキーを押しながらドラッグ・アンド・ドロップをする事で新たにz軸が表示され、元々2次元であった図形が3次元図形に変換され、正確には本来2次元のように見える座標に表示されていた3次元図形が、視点を変える事によってz軸が現わされた事により、きちんとした3次元に見えるようになったのである。
+<br>
+<br>
+<img alt="" height="384" src="Iannix003.jpg" width="683" />
+<br>
+<br>
+この形でも図形譜としては成り立つが、このままでは音が出なく、人によっては少し見にくいので、音を出す点「Triggers」の追加と上の画像右下のパラメータを操作する。
+<br>
+そして、「Triggers」を追加するには、上の画像右上の「RESAMPLE」ボタンを押すと、「Generate triggers instead of resampling curve」のボタンを押し、「Number of points」の数値を好きな値に変更する。
+<br>
+「OK」ボタンを押す事で適用され、変更が下の画像のように図形譜に反映される。
+<br>
+<br>
+<img alt="" height="384" src="Iannix004.jpg" width="683" />
+<br>
+<br>
+コンピュータで演奏するには音源が必要である。
+<br>
+そこで、ここでは微分音チューニングソフトウェア「Scala」と仮想midiインターフェース「loopMIDI」でIannixとmidi連携し、演奏をシミュレーションする。
+<br>
+普段私達が効いている音楽は12平均律(C、Cシャープ、D、Eフラット、E、F、Fシャープ、G、Gシャープ、A、Bフラット、B)で表されるものが多い。
+<br>
+「12平均律(またはそれを省略して「平均律」)」とは、1オクターブ（基準のCからその1個上の高さのCまでの音）を12分割した音のそれぞれである。
+<br>
+それに対して「微分音」とは、1オクターブをn分割した音のそれぞれである。
+<br>
+この時、nに入る値は12より小さくても、12でも、12より大きくても良い。
+<br>
+微分音は民族音楽や現代音楽、エレクトロニック等、様々なジャンルの音楽の演奏場面で使用されている。
+<br>
+Scalaでの微分音のチューニング方法を説明する。
+<br>
+下の画像がScalaのスタート画面である。
+<br>
+<br>
+<img alt="" height="384" src="Scala001.jpg" width="683" />
+<br>
+<br>
+まず、下の画像のように「File」メニューの「New」から「Equal temperament」という選択肢を選ぶ。
+<br>
+<br>
+<img alt="" height="384" src="Scala002.jpg" width="683" />
+<br>
+<br>
+選択肢を選ぶと平均律を微分音に分割する画面が出現する。
+<br>
+<br>
+<img alt="" height="384" src="Scala003.jpg" width="683" />
+<br>
+<br>
+出現した画面の「Division」の値を好きな数値に変え、その後に「Number of tones」の数値の欄をクリックすると「Division」で変更した値が「Number of tones」に同期され、それぞれ同じ数値になる。
+<br>
+ここでは、midi音源が出せる音の数が2⁷-1=127音という事で、128音目を1オクターブ上の音として128平均律に設定する。
+<br>
+ここまで終了した時点で画面中央右下の「Equal Temperament Data」を押すと設定したデータがScala内のスタート画面のコンソール部分に表示され、「適用(A)」、「OK(O)」の順にクリックする事で微分音チューニングの設定が反映される。
+<br>
+<br>
+<img alt="" height="384" src="Scala004.jpg" width="683" />
+<br>
+<br>
+設定した微分音を鍵盤でシミュレーションしたり、微分音鍵盤の平均律の割り当てを変更するには上の画像左上の「Play」をクリックすると下の画像のように鍵盤が表示される。
+<br>
+<br>
+<img alt="" height="384" src="Scala005.jpg" width="683" />
+<br>
+<br>
+鍵盤の設定と確認が終わったら、「閉じる(C)」、あるいは「×」ボタンを押して鍵盤の画面を閉じ、下の画像の左上にある「Relay」を押すと、画像のように「Microtuning MIDI Relay」という、仮想midiインターフェースを介してコンピュータ内のシフトウェア・シンセサイザーの音源として適用する画面が出現する。
+<br>
+<br>
+<img alt="" height="384" src="Scala006.jpg" width="683" />
+<br>
+<br>
+この時同時に、下の画像のようにloopMIDIの画面も表示させておく。
+<br>
+<br>
+<img alt="" height="384" src="Scala007.jpg" width="683" />
+<br>
+<br>
+midi入力を仮想midiインターフェースに設定する。
+<br>
+ここでは下の画像のように、loopMIDIの中の「loopMIDI Port」に設定する。
+<br>
+<br>
+<img alt="" height="384" src="Scala008.jpg" width="683" />
+<br>
+<br>
+設定した後の画面は、下の画像のようになる。
+<br>
+<br>
+<img alt="" height="384" src="Scala009.jpg" width="683" />
+<br>
+<br>
+続いて、midi出力を設定する。
+<br>
+上の画像の右下「Change」を押すと、下の画像の中央にあるような「MIDI Sound Settings」という、出力音源を設定する画面が出てくるので、ここでは下の画像のように、midi出力を「Microsoft GS Wavetable Synth」に設定する。
+<br>
+<br>
+<img alt="" height="384" src="Scala010.jpg" width="683" />
+<br>
+<br>
+設定した後は下の画像のようになっている。
+<br>
+<br>
+<img alt="" height="384" src="Scala011.jpg" width="683" />
+<br>
+<br>
+上の画像中央「MIDI Program」の中の楽器を変える事で、出力音源を好みの楽器に設定出来る。
+<br>
+その後、「適用(A)」、「OK(O)」の順にクリックし、下の画像右下のように「Start Relaying」ボタンを押す。
+<br>
+<br>
+<img alt="" height="384" src="Scala012.jpg" width="683" />
+<br>
+<br>
+下の画像のようになっていれば動作している事になる。
+<br>
+<br>
+<img alt="" height="384" src="Scala013.jpg" width="683" />
+<br>
+<br>
+これでIannixとScalaがmidi経由で連携され、Iannixでの演奏が可能になる。
+<br>
+Iannixでの演奏シミュレーションの前に、下の画像中央にある手の形をした「Locks objects position」ボタンの左の「Allows cursors selection」をクリックする事で、図形譜の中の演奏位置をリアルタイムで鮮明に見る事が出来る。
+<br>
+<br>
+<img alt="" height="384" src="Iannix005.jpg" width="683" />
+<br>
+<br>
+下の動画が3次元図形譜の128平均律微分音の演奏をシミュレーションしたものである。
+<br>
+<br>
+<embed src="VSJ_01.mp4" height="384" width="683" />
+<br>
+<br>
+ここで紹介した事以外でもIannixでは、下の画像や動画のように2次元での図形譜の作成でも十分に表現出来る。
+<br>
+<br>
+図形譜作成ソフトウェアはIannixだけでなく「HighC」やフランス国立音響音楽研究所（IRCAM）が紹介している「OpenMusic」等、様々な種類が存在している。
+<br>
+因みに、中でも「HighC」は初心者でも分かりやすく、使いやすいソフトウェアである。
+<br>
+下の動画はこれまでに「HighC」で作成した音楽であるが、x軸が時間、y軸が音高（周波数）、色が表すものが演奏される楽器の種類である。
+<br>
+<br>
+<div class="slider">
+<img src="Lepton_I.jpg" width="683" height="384" alt="">
+<img src="Lepton_II.jpg" width="683" height="384" alt="">
+<img src="Lepton_III.jpg" width="683" height="384" alt="">
+<img src="Lepton_IV.jpg" width="683" height="384" alt="">
+<img src="Lepton_V.jpg" width="683" height="384" alt="">
+<img src="Lepton_VI.jpg" width="683" height="384" alt="">
+<img src="Lepton_VII.jpg" width="683" height="384" alt="">
+<img src="Lepton_VIII.jpg" width="683" height="384" alt="">
+<img src="Lepton_IX.jpg" width="683" height="384" alt="">
+<img src="Lepton_X.jpg" width="683" height="384" alt="">
+<img src="Lepton_XI.jpg" width="683" height="384" alt="">
+<img src="Lepton_XII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XIII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XIV.jpg" width="683" height="384" alt="">
+<img src="Lepton_XV.jpg" width="683" height="384" alt="">
+<img src="Lepton_XVI.jpg" width="683" height="384" alt="">
+<img src="Lepton_XVII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XVIII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XIX.jpg" width="683" height="384" alt="">
+<img src="Lepton_XX.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXI.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXIII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXIV.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXV.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXVI.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXVII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXVIII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXIX.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXX.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXXI.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXXII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXXIII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXXIV.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXXV.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXXVI.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXXVII.jpg" width="683" height="384" alt="">
+<img src="Lepton_XXXVIII.jpg" width="683" height="384" alt="">
+</div>
+<br>
+<br>
+<iframe width="683" height="384" src="https://www.youtube.com/embed/videoseries?list=PLWBX6urfhs_EnljpRsycKWA7map4y6RVs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<br>
+<br>
+また、下の動画はこれまでIannixで作成した音楽である。
+<br>
+円形や楕円形のような繰り返し演奏されるものは画面の中央頂上を一番低い周波数として、各図形内の軌道を再生位置を表す「Cursor」が進む事によって周波数が高くなり、各図形の中央頂上に戻る事により元の周波数の高さに戻るという仕組みになっている。
+<br>
+波形や直線等の図形で表されるものに関しては、開始位置を一番低い音として、時間が進み、再生位置が終わりに図形の近づくにより、高い音になるという構造である。
+<br>
+<br>
+<div class="slider">
+<img src="Quark_I.jpg" width="683" height="384" alt="">
+<img src="Quark_II.jpg" width="683" height="384" alt="">
+<img src="Quark_III.jpg" width="683" height="384" alt="">
+<img src="Quark_IV.jpg" width="683" height="384" alt="">
+<img src="Quark_V.jpg" width="683" height="384" alt="">
+<img src="Quark_VI.jpg" width="683" height="384" alt="">
+<img src="Quark_VII.jpg" width="683" height="384" alt="">
+<img src="Quark_VIII.jpg" width="683" height="384" alt="">
+<img src="Quark_IX.jpg" width="683" height="384" alt="">
+</div>
+<br>
+<br>
+<iframe width="683" height="384" src="https://www.youtube.com/embed/videoseries?list=PLWBX6urfhs_H9hQfBYEyLVj_6URRUhGDh" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>
+<br>
+<br>
+今回例として挙げた、IannixやHighC、OpenMusicは容易に始める事が出来るので、試してみると良いと思う。
+</font>
+<br>
+<br>
+<br>
+<br>
+<br>
+ <font size="+2">
+<b>聴覚障がい者のための音の可視化</b>
+</font>
+<br>
+<br>
+<br>
+<img alt="" height="384" src="Caption002.jpg" width="683" />
+<br>
+<br>
+<br>
+<font size="+1">
+<b>作成方法等解説</b>
+</font>
+<font size ="+0">
+<br>
+<br>
+<br>
+ 私は、今まで多くの障がい者と関わりを持ってきた。
+<br>
+その範囲は発達障害を持つ方々や、知的障がい者と呼ばれる方々等様々である。
+<br>
+今年の春、私は耳がほとんど聞こえない、いわゆる「聴覚障がい者」と呼ばれる学生と知り合った。
+<br>
+その学生に何度か話を聞いている中で、彼は音に関して興味を持っていて興味深いエピソードを話してくれたので彼のために、また、聴覚障がい者のために少しでも役に立つ事は出来ないか、と考えた事が動機である。
+<br>
+そこで、ここでは音を可視化し、聴覚障がい者に音を表現するためにオンラインのビジュアルライブコーディングツール「hydra」にて、音が入力された時の映像の制御方法を紹介する。
+<br>
+まず、この「hydra」には幾つか類似した系列のツールがあるので、「hydra」と共に紹介する。
+<br>
+<br>
+「hydra」
+<br>
+https://hydra.ojack.xyz/
+<br>
+または
+<br>
+https://hydra-editor-v1.glitch.me/
+<br>
+<br>
+「PIXELJAM」
+<br>
+http://pixeljam.glitch.me/
+<br>
+<br>
+「hydra inside a webpage」
+<br>
+https://hydra-webpage.glitch.me/
+<br>
+<br>
+「SpaceX p5.js Editor」
+<br>
+https://spacex-p5js-editor.glitch.me/
+<br>
+<br>
+「p5.js Web Editor」
+<br>
+https://editor.p5js.org/
+<br>
+<br>
+これらの中で、ここでは「hydra」を使用する。
+<br>
+まず、hydraを開くと下の画像のような画面になっている。
+<br>
+また、開始時の映像は幾つかあるパターンの中でもランダムで生成されるので、毎回同じ映像が出るとは限らない。
+<br>
+<br>
+<img alt="" height="384" src="hydra.jpg" width="683" />
+<br>
+<br>
+上の画像の映像内右上の「×」を押し、既にある映像を編集していく。
+<br>
+このように、プログラムをリアルタイムで編集、実行しながら、音や映像をその場で即興的に生成していくパフォーマンスの形態を、「ライブコーディング」という。
+<br>
+「hydra」内のライブコーディングに関する詳しい概要説明は、「ojack/hydra: Livecoding networked visuals in the browser　（https://github.com/ojack/hydra）　」ページ内、関数に関する説明は「hydra/funcs.md at master · ojack/hydra　（https://github.com/ojack/hydra/blob/master/docs/funcs.md）　」ページ内を参照出来る。
+<br>
+ここでは、音の入力に同期して映像を制御する関数「a.fft」を活用し、音を可視化する。
+<br>
+下の動画を見て頂きたい。
+<br>
+<br>
+<embed src="VSJ_02.mp4" height="384" width="683" />
+<br>
+<br>
+動画では、ライブコーディングで生成した映像に「()=>(a.fft[0]*0.5+1)」と入力する事によって、一番低い周波数に大きく反応するように編集している。
+<br>
+関数の解説になるが、「()=>(a.fft[0]*0.5+1)」の中の、「[]」内の値は数値を高い値に設定すればする程、高い周波数に反応するようになっている。
+<br>
+続いて、「()=>(a.fft[0]*0.5+1)」の中の、「0.5」という値は、映像が音に反応する大きさを示していて、大きい値に設定する程、入力された音に対する反応が大きくなる。
+<br>
+「()=>(a.fft[0]*0.5+1)」の中の、「1」という値は、音が入力されていない時の映像やその中で使用されている形の、標準を「1」とした時の変化率を表していて、数値を大きく設定する程、音が入力されていない時のデフォルトの映像が変化する。
+<br>
+<br>
+以上の3次元図形譜と音の可視化を通して、音を視覚的に表現する事に関して、3次元図形譜については、今後様々な4次元、5次元等、様々な次元で表現された図形譜が出現する可能性や、音の可視化に関しては、今回のように音のタイミングや音の大きさだけでなく、音高にも反応出来るようになる期待を感じた。
+<br>
+<br>
+<br>
+参考文献：
+<br>
+「Iannix」 : https://www.iannix.org/en/
+<br>
+「Scala Home Page」 : http://www.huygens-fokker.org/scala/
+<br>
+「微分音の鳴らし方・再生法 - 微分音のメモ帳 -microtonal memo-」 : https://sites.google.com/site/microtonalmemo/how-to-microtuning#TOC-Scala-1
+<br>
+「HighC - draw your music」 : http://highc.org/ 
+<br>
+「IRCAM | Ircam」 : https://www.ircam.fr/lircam/ 
+<br>
+「Ircam Software | Ircam Forum」 : https://forum.ircam.fr/collections/detail/technologies-ircam/ 
+<br>
+「hydra」 : https://hydra.ojack.xyz/
+<br>
+「ojack/hydra: Livecoding networked visuals in the browser」 : https://github.com/ojack/hydra
+<br>
+「hydra/funcs.md at master · ojack/hydra」 : https://github.com/ojack/hydra/blob/master/docs/funcs.md </font>
+</body>
+</html>
